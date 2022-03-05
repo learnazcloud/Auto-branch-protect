@@ -6,7 +6,7 @@ import requests  # pylint: disable=import-error
 from flask import Flask, request  # pylint: disable=import-error
 
 app = Flask(__name__)
-
+print("app",app)
 
 @app.route("/", methods=["POST"])
 def webhook():
@@ -32,7 +32,7 @@ def webhook():
             session = requests.session()
             session.auth = (user, cred)
             response_1 = session.put(
-                payload["repository"]["url"] + "/branches/master/protection",
+                payload["repository"]["url"] + "/branches/main/protection",
                 json.dumps(branch_protection),
             )
             if response_1.status_code == 200:
