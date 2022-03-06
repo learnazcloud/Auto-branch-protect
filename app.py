@@ -14,12 +14,14 @@ def webhook():
     payload = request.get_json()
     user = "learnazcloud"
     cred = os.environ["GH_TOKEN"]
+	
+	
     if payload is None:
         print("POST was not formatted in JSON")
-
+	
     # Verify the repo was created
     try:
-        if payload["action"] == "created":
+        if payload["action"] == "created" or payload["action"] == "publicized" or payload["ref"] == "main":
             # Delay needed for server to be create the page, otherwise a 404 returns
             time.sleep(1)
             # Create branch protection for the master branch of the repo
@@ -35,6 +37,7 @@ def webhook():
                 payload["repository"]["url"] + "/branches/main/protection",
                 json.dumps(branch_protection),
             )
+
             if response_1.status_code == 200:
                 print(
                     "Branch protection created successfully. Status code: ",
@@ -48,7 +51,7 @@ def webhook():
                             "title": "New Protection Added",
                             "body": "@"
                             + user
-                            + " A new branch protection was added to the master branch.",
+                            + " @learnazcloud-secteam A new branch protection was added to the master branch.",
                         }
                         session = requests.session()
                         session.auth = (user, cred)
@@ -76,8 +79,10 @@ def webhook():
                 print(response_1.content)
                 print(
                     "Unable to create branch protection. Status code: ",
-                    response_1.status_code,
+					response_1.status_code,
+					"No Branch found- Creating one",
                 )
+                
     except KeyError:
         # Ignore POST payload since it is not a create action
         pass
