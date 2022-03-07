@@ -86,7 +86,8 @@ Here are the detail setup instructions
     - This identifies an event of changing the visibility of a repository from "Private" to "Public"
     
  3. Branch Protection Rules were expanded to following => https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
-      branch_protection = {
+     ```
+     branch_protection = {
 				"required_status_checks": None,
 				"pull_request_reviews_enforcement_level": "off",
 				"required_approving_review_count": 1,
@@ -111,6 +112,7 @@ Here are the detail setup instructions
 				"required_pull_request_reviews": None,
                 "restrictions": None,
             }
+	```
   However the code still needs extended testing to test each settings. 
   4. Zack's original code refers to "master" as the default branch. However, I used "main" as the default branch in my organization. Therefore, the script threw errors that the branch was not found. This can be fixed in two ways - 
       - Go to the organization --> settings --> Branches & change the default branch to "master" instead of "main"
