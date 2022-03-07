@@ -29,38 +29,38 @@ Here are the detail setup instructions
        flask run
     - This will start the flask on your local machine at http://localhost:5000. The ip address for localhost may differ.
 3. Ngrok - This is used to expose the Flask app running at http://localhost:5000 to external facing service. Once setup Ngrok provides a forward URL which is used as a webhook in the following steps. 
-    a. You need to first signup at http://ngrok.com. You can use your GitHub account to sign up.
-    b. Next step is to download ngrok on your local machine. For windows, it provides ngrok.exe. You need to copy it to the folder location where you had cloned the repository. 
-    c. Next step is to get AuthToken. This is available when you logon to ngrok.com under getting started --> Your AuthToken
-    d. Open a new command prompt and type following command to set ngrok authtoken env variable on your machine
+    - You need to first signup at http://ngrok.com. You can use your GitHub account to sign up.
+    - Next step is to download ngrok on your local machine. For windows, it provides ngrok.exe. You need to copy it to the folder location where you had cloned the repository. 
+    - Next step is to get AuthToken. This is available when you logon to ngrok.com under getting started --> Your AuthToken
+    - Open a new command prompt and type following command to set ngrok authtoken env variable on your machine
             ngrok authtoken 25wTBihXXXXXXXXXXXXXX
-    e. Once this is set, type following command to expose flask app with ngrok
+    - Once this is set, type following command to expose flask app with ngrok
             ngrok http http://localhost:5000 -host-header="localhost:5000"
-    f. This provides a http and https forwarding urls as an output
-    g. Copy the http forwarding URL to use as a webhook in GitHub
+    - This provides a http and https forwarding urls as an output
+    - Copy the http forwarding URL to use as a webhook in GitHub
 4. Setting up Webhook in GitHub
-    a. Login to GitHub as the user which was used to create an "Organization" in GitHub. In this case, @learnazcloud
-    b. Click on the right hand corner on the user profile and select "Your Organizations"
-    c. Select the organization and go to settings
-    d. Select "webhooks" from the left side menu
-    e. Click "Create a new webhook"
-        i.    For "Payload URL" - Use the http forwarding URL from the ngrok setup.
-        ii.   Content type - application/json 
-        iii.  secret - leave blank
-        iv. Which events would you like to trigger this webhook?
+    - Login to GitHub as the user which was used to create an "Organization" in GitHub. In this case, @learnazcloud
+    - Click on the right hand corner on the user profile and select "Your Organizations"
+    - Select the organization and go to settings
+    - Select "webhooks" from the left side menu
+    - Click "Create a new webhook"
+        - For "Payload URL" - Use the http forwarding URL from the ngrok setup.
+        - Content type - application/json 
+        - secret - leave blank
+        - Which events would you like to trigger this webhook?
               - select "let me select individual events".
               - select "Repositories". Unselect "Pushes"
-        v. Click "Add Webhook"
+        - Click "Add Webhook"
 5. Test the scenario
-    a. Create two dummy users for testing. In this scenario I created @learnazcloud-user00 and @learnazcloud-user01. 
-    b. Login as @learnazcloud and add the dummy users to organization as members
-    c. Login as @learnazcloud-user00 and create a new repository with README.MD file (This enforces a new branch creation)
-    d. GitHub EventType API generates a response to this event and sends it to the webhook that was setup earlier.
-    e. The payload is then passed by ngrok via the forwarding url to flask app on localhost:5000.
-    f. The post method inside the python script receives the payload and performs the actions to add branch protection rules and issues with notification
-    g. Login as @learnazcloud-secteam to confirm the notifications. 
-    h. login as @learnazcloud-user01 to perform a commit and validate that the user is prevented from merging
-    i. Login as @learnazcloud-user00 to validate that the user can perform the reviews and merge operations.     
+    - Create two dummy users for testing. In this scenario I created @learnazcloud-user00 and @learnazcloud-user01. 
+    - Login as @learnazcloud and add the dummy users to organization as members
+    - Login as @learnazcloud-user00 and create a new repository with README.MD file (This enforces a new branch creation)
+    - GitHub EventType API generates a response to this event and sends it to the webhook that was setup earlier.
+    - The payload is then passed by ngrok via the forwarding url to flask app on localhost:5000.
+    - The post method inside the python script receives the payload and performs the actions to add branch protection rules and issues with notification
+    - Login as @learnazcloud-secteam to confirm the notifications. 
+    - login as @learnazcloud-user01 to perform a commit and validate that the user is prevented from merging
+    - Login as @learnazcloud-user00 to validate that the user can perform the reviews and merge operations.     
  
 ## Alternate architecture with AWS Lambda and Amazon API Gateway
 1. AWS Lambda script is included in the repository under "aws_lambda" folder. 
@@ -74,17 +74,17 @@ Here are the detail setup instructions
  
 ## Modifications from Zack's original code
 1. Added A security Team User @learnazcloud-secteam
-  a. This repo is forked from Zack's original repository => https://github.com/zkoppert/Auto-branch-protect and following updates were made
-  b. In Zack's original code, he used the user who owned the organization for notifications. However, it was observed that the administrator user didn't receive an email or web notification. In my scenario this user is "@learnazcloud". 
-  c. Changing "Notification Settings" for the owner user (learnazcloud) to enable "include your own updates" option under "Email notification preferences".
+  - This repo is forked from Zack's original repository => https://github.com/zkoppert/Auto-branch-protect and following updates were made
+  - In Zack's original code, he used the user who owned the organization for notifications. However, it was observed that the administrator user didn't receive an email or web notification. In my scenario this user is "@learnazcloud". 
+  - Changing "Notification Settings" for the owner user (learnazcloud) to enable "include your own updates" option under "Email notification preferences".
   This sent an email alert however the web notification was still not coming through. This behaviour is by functionality. 
-  d. To solve it a new user "learnazcloud-secteam" was created and added to the organization members. The script was updated to include a mention to this user which sent both email and web notifications to this new user. Thus mimicking a true scenario of the security team being notified in case of new repository creations. 
-  e. If you would like to change this to anyother user then please go to line 73 of app.py & change the user instead of @learnazcloud-secteam
+  - To solve it a new user "learnazcloud-secteam" was created and added to the organization members. The script was updated to include a mention to this user which sent both email and web notifications to this new user. Thus mimicking a true scenario of the security team being notified in case of new repository creations. 
+  - If you would like to change this to anyother user then please go to line 73 of app.py & change the user instead of @learnazcloud-secteam
       + " @learnazcloud-secteam A new branch protection was added to the master branch.",
   
  2. Zack's original code added branch protection only when new repository is "Public". When a new repository is private, the branch protection can only be added with a "Pro" Plan. When with a free plan, if a visibility of a private repository, is changed to "public", then the protection rules were not added.
-    a. To fix this payload["action"] == "publicized" was added to line no 24 of app.py
-    b. This identifies an event of changing the visibility of a repository from "Private" to "Public"
+    - To fix this payload["action"] == "publicized" was added to line no 24 of app.py
+    - This identifies an event of changing the visibility of a repository from "Private" to "Public"
     
  3. Branch Protection Rules were expanded to following => https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
       branch_protection = {
@@ -114,9 +114,9 @@ Here are the detail setup instructions
             }
   However the code still needs extended testing to test each settings. 
   4. Zack's original code refers to "master" as the default branch. However, I used "main" as the default branch in my organization. Therefore, the script threw errors that the branch was not found. This can be fixed in two ways - 
-      a. Go to the organization --> settings --> Branches & change the default branch to "master" instead of "main"
+      - Go to the organization --> settings --> Branches & change the default branch to "master" instead of "main"
       --OR --
-      b. Go to app.py on line 53 and under "/branches/master/protection" change it to "/branches/main/protection". 
+      - Go to app.py on line 53 and under "/branches/master/protection" change it to "/branches/main/protection". 
              payload["repository"]["url"] + "/branches/main/protection",
 
 ## Related Documentation from Zack's README
