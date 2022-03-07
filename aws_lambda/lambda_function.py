@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     print(payload)
     
     user = "learnazcloud"
-    cred = "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"
+    cred = "Add your GH_TOKEN here"
 	
 	
     if payload is None:
