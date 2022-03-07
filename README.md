@@ -14,20 +14,20 @@ Auto branch protect is a simple web service that listens for organization events
 - Next step is to browse to a file path of your choice on your local machine & run following command (in command prompt) to clone this repository on your local machine
         git clone https://github.com/learnazcloud/Auto-branch-protect.git
 
-There are three main parts to this tool. 
+Here are the detail setup instructions 
 1. app.py - This  is a python script which receives payload from GitHub via webhook and processes the information. The script identifies that a new repository is created and adds a branch protection rule to the main branch. A new issue is created notifying the user defined in the script. 
-    a. The script needs GitHub token for the administrator user to run this script. 
-    b. In this scenario the user is @learnazcloud
-    c. The token is obtained from User --> Settings --> Developer Settings --> Personal Access Tokens --> Generate New Token
-    d. The token from here is then set as an environment variable by using following command in "Command Prompt" on windows. 
+    - The script needs GitHub token for the administrator user to run this script. 
+    - In this scenario the user is @learnazcloud
+    - The token is obtained from User --> Settings --> Developer Settings --> Personal Access Tokens --> Generate New Token
+    - The token from here is then set as an environment variable by using following command in "Command Prompt" on windows. 
        set GH_TOKEN = abcd_1223458605  (ofcourse that's not a real token!!)
-    e. Remember to set the GH_TOKEN if a new command prompt window is opened for invoking another instance. Otherwise it throws "KeyError" : 'GH_TOKEN' error. 
+    - Remember to set the GH_TOKEN if a new command prompt window is opened for invoking another instance. Otherwise it throws "KeyError" : 'GH_TOKEN' error. 
 2. Flask - This creates a local web service by running app.py at http://localhost:5000
-    a. Following commands were run in command prompt to prepare flask
+    - Following commands were run in command prompt to prepare flask
        set FLASK_ENV=development
        set FLASK_APP=app.py
        flask run
-    b. This will start the flask on your local machine at http://localhost:5000. The ip address for localhost may differ.
+    - This will start the flask on your local machine at http://localhost:5000. The ip address for localhost may differ.
 3. Ngrok - This is used to expose the Flask app running at http://localhost:5000 to external facing service. Once setup Ngrok provides a forward URL which is used as a webhook in the following steps. 
     a. You need to first signup at http://ngrok.com. You can use your GitHub account to sign up.
     b. Next step is to download ngrok on your local machine. For windows, it provides ngrok.exe. You need to copy it to the folder location where you had cloned the repository. 
