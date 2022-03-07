@@ -15,7 +15,7 @@ Auto branch protect is a simple web service that listens for organization events
         git clone https://github.com/learnazcloud/Auto-branch-protect.git
 	
 ## Architecture
-!(https://github.com/learnazcloud/Auto-branch-protect/blob/main/assets/architecture-abp-tool.jpg)
+![Architecture](https://github.com/learnazcloud/Auto-branch-protect/blob/main/assets/architecture-abp-tool.jpg)
 
 ## Setup Instructions 
 1. app.py - This  is a python script which receives payload from GitHub via webhook and processes the information. The script identifies that a new repository is created and adds a branch protection rule to the main branch. A new issue is created notifying the user defined in the script. 
@@ -66,7 +66,7 @@ Auto branch protect is a simple web service that listens for organization events
     - Login as @learnazcloud-user00 to validate that the user can perform the reviews and merge operations.     
  
 ## Alternate architecture with AWS Lambda and Amazon API Gateway
-!https://github.com/learnazcloud/Auto-branch-protect/blob/main/assets/architecture-abp-aws-tool.jpg
+![AWS Lambda Architecture](https://github.com/learnazcloud/Auto-branch-protect/blob/main/assets/architecture-abp-aws-tool.jpg)
 
 1. AWS Lambda script is included in the repository under "aws_lambda" folder. 
 2. Logon to AWS console and create a new lambda function. Paste the function code from the "lambda_function.py" file from "aws_lambda" folder
