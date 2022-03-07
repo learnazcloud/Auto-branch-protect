@@ -74,12 +74,11 @@ Here are the detail setup instructions
  
 ## Modifications from Zack's original code
 1. Added A security Team User @learnazcloud-secteam
-  - This repo is forked from Zack's original repository => https://github.com/zkoppert/Auto-branch-protect and following updates were made
-  - In Zack's original code, he used the user who owned the organization for notifications. However, it was observed that the administrator user didn't receive an email or web notification. In my scenario this user is "@learnazcloud". 
-  - Changing "Notification Settings" for the owner user (learnazcloud) to enable "include your own updates" option under "Email notification preferences".
-  This sent an email alert however the web notification was still not coming through. This behaviour is by functionality. 
-  - To solve it a new user "learnazcloud-secteam" was created and added to the organization members. The script was updated to include a mention to this user which sent both email and web notifications to this new user. Thus mimicking a true scenario of the security team being notified in case of new repository creations. 
-  - If you would like to change this to anyother user then please go to line 73 of app.py & change the user instead of @learnazcloud-secteam
+ 	- This repo is forked from Zack's original repository => https://github.com/zkoppert/Auto-branch-protect and following updates were made
+  	- In Zack's original code, he used the user who owned the organization for notifications. However, it was observed that the administrator user didn't receive an email or web notification. In my scenario this user is "@learnazcloud". 
+  	- Changing "Notification Settings" for the owner user (learnazcloud) to enable "include your own updates" option under "Email notification preferences". This sent an email alert however the web notification was still not coming through. This behaviour is by functionality. 
+  	- To solve it a new user "learnazcloud-secteam" was created and added to the organization members. The script was updated to include a mention to this user which sent both email and web notifications to this new user. Thus mimicking a true scenario of the security team being notified in case of new repository creations. 
+  	- If you would like to change this to anyother user then please go to line 73 of app.py & change the user instead of @learnazcloud-secteam
       + " @learnazcloud-secteam A new branch protection was added to the master branch.",
   
  2. Zack's original code added branch protection only when new repository is "Public". When a new repository is private, the branch protection can only be added with a "Pro" Plan. When with a free plan, if a visibility of a private repository, is changed to "public", then the protection rules were not added.
